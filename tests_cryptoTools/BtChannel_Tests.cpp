@@ -22,7 +22,7 @@
 #include "BtChannel_Tests.h"
 
 #include "Common.h"
-#include <cryptoTools/Common/TestCollection.h>
+#include "cryptoTools/Common/TestCollection.h"
 #include <chrono>
 #include <thread>
 #include "cryptoTools/Common/CLP.h"

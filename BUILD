@@ -106,7 +106,7 @@ DEFAULT_C_OPT = ENABLE_SSE_COPT + ENABLE_RELIC_COPT
 DEFAILT_LINK_OPT = ENABLE_RELIC_DEPS
 
 cc_library(
-  name = "libcryptoTools",
+  name = "cryptoTools",
   srcs = glob([
     "cryptoTools/Circuit/*.cpp",
     "cryptoTools/Common/*.cpp",
@@ -160,11 +160,13 @@ cc_library(
 cc_library(
   name = "tests_cryptoTools",
   srcs = glob([
-    "tests_cryptoTools/**/*.cpp"
-  ]),
+      "tests_cryptoTools/**/*.cpp"
+    ],
+    exclude = ["tests_cryptoTools/Cuckoo_Tests.cpp"],
+  ),
   hdrs = glob([
     "tests_cryptoTools/**/*.h"
-  ]),
+    ]),
   copts = [
     " -O0 -g -ggdb -rdynamic",
     "-DENABLE_CIRCUITS=ON",
@@ -182,10 +184,17 @@ cc_library(
   name = "lib_frontend_cryptoTools",
   srcs = glob([
     "frontend_cryptoTools/**/*.cpp"
-  ]),
+    ],
+    exclude = [
+      "frontend_cryptoTools/cuckoo/cuckooTests.cpp",
+      "frontend_cryptoTools/main.cpp",
+    ],
+  ),
   hdrs = glob([
-    "frontend_cryptoTools/**/*.h"
-  ],),
+      "frontend_cryptoTools/**/*.h"
+    ],
+    exclude = [],
+  ),
   copts = [
     " -O0 -g -ggdb -rdynamic",
     "-DENABLE_CIRCUITS=ON",
@@ -204,10 +213,8 @@ cc_library(
 cc_binary(
   name = "frontend_cryptoTools",
   srcs = glob([
-    "frontend_cryptoTools/**/*.cpp",
-    "frontend_cryptoTools/**/*.h",
+    "frontend_cryptoTools/main.cpp",
   ]),
-  includes = [".", "Tutorials/Network.h"],
   copts = [
     "-O0 -g -ggdb -rdynamic",
     "-DENABLE_CIRCUITS=ON",

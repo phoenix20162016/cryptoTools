@@ -1,11 +1,11 @@
 #include "Circuit_Tests.h"
-#include <cryptoTools/Circuit/BetaLibrary.h>
+#include "cryptoTools/Circuit/BetaLibrary.h"
 
 #include "cryptoTools/Crypto/PRNG.h"
 #include "cryptoTools/Common/Log.h"
 #include <random>
 #include <fstream>
-#include <cryptoTools/Common/TestCollection.h>
+#include "cryptoTools/Common/TestCollection.h"
 using namespace oc;
 #ifdef ENABLE_CIRCUITS
 

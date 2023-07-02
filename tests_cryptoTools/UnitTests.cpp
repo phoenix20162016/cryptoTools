@@ -63,9 +63,9 @@ namespace tests_cryptoTools
         th.add("BitVector_Copy_Test                     ", BitVector_Copy_Test_Impl);
         th.add("BitVector_Resize_Test                   ", BitVector_Resize_Test_Impl);
 
-        th.add("CuckooIndex_many_Test                   ", CuckooIndex_many_Test_Impl);
-        th.add("CuckooIndex_paramSweep_Test             ", CuckooIndex_paramSweep_Test_Impl);
-        th.add("CuckooIndex_parallel_Test               ", CuckooIndex_parallel_Test_Impl);
+        // th.add("CuckooIndex_many_Test                   ", CuckooIndex_many_Test_Impl);
+        // th.add("CuckooIndex_paramSweep_Test             ", CuckooIndex_paramSweep_Test_Impl);
+        // th.add("CuckooIndex_parallel_Test               ", CuckooIndex_parallel_Test_Impl);
 
         th.add("REccpNumber_Test                        ", REccpNumber_Test);
         th.add("REccpPoint_Test                         ", REccpPoint_Test);

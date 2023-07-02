@@ -6,9 +6,9 @@
 
 #include "Common.h"
 #include "cryptoTools/Common/Defines.h"
-#include <cryptoTools/Crypto/RCurve.h>
+#include "cryptoTools/Crypto/RCurve.h"
 #include "cryptoTools/Common/Log.h"
-#include <cryptoTools/Common/TestCollection.h>
+#include "cryptoTools/Common/TestCollection.h"
 using namespace osuCrypto;
 
 
