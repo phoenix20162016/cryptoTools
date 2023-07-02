@@ -5,17 +5,17 @@
 CryptoTools is a portable c++14 library containing a collection of tools for building cryptographic protocols. This include asynchronous networking (Boost Asio), several fast primitives such as AES (AES-NI), Blake2 (assembly), and eliptic curve crypto (Relic-Toolkit, Miracl, or libsodium). There are also several other utilities tailored for implementing protocols.
 
 Thirdparty networking is also supported. See `frontend_cryptoTools/tutorial/Network.cpp` for an example.
-  
 
- 
+
+
 
 ## Build
- 
-The library is *cross platform* and has been tested on Windows, Mac and Linux. 
+
+The library is *cross platform* and has been tested on Windows, Mac and Linux.
 There is one mandatory dependency on [Boost 1.75](http://www.boost.org/) (networking),
 and **optional dependency** on
 [Relic](https://github.com/relic-toolkit/relic). CMake 3.18+ is required and the build script assumes python 3.
- 
+
 
 ```
 git clone https://github.com/ladnir/cryptoTools
@@ -25,13 +25,13 @@ python build.py -D ENABLE_RELIC=ON
 ```
 It is possible to build only the protocol(s) that are desired via cmake command. In addition, if boost and or relic are already installed, then `boost` or `relic` can be ommitted from `python build.py setup boost relic`.
 
-See the output of `python build.py` or `cmake .` for available compile options. For example, 
+See the output of `python build.py` or `cmake .` for available compile options. For example,
 ```
 python build.py -D ENABLE_SSE=OFF
 ```
 will build without SSE instrisics. Argument after the `--` are forwarded to cmake.
 
-The main executable with examples is `frontend` and is located in the build directory, eg `out/build/linux/frontend/frontend_cryptoTools, out/build/x64-Release/frontend/Release/frontend_cryptoTools.exe` depending on the OS. 
+The main executable with examples is `frontend` and is located in the build directory, eg `out/build/linux/frontend/frontend_cryptoTools, out/build/x64-Release/frontend/Release/frontend_cryptoTools.exe` depending on the OS.
 
 **Enabling/Disabling dependancies:**
  * The library can be built without Relic as
@@ -44,7 +44,7 @@ python build.py -D -D ENABLE_RELIC=OFF
 python build.py --setup --relic
 python build.py -D -D ENABLE_BOOST=OFF
 ```
- 
+
 
 ## Install
 
@@ -56,7 +56,7 @@ You can also provide and install location by specifying `--install=path/to/insta
 
 The main library is similarly installed as
 ```
-python build.py --install 
+python build.py --install
 ```
 
 By default, sudo is not used. If installation requires sudo access, then call
@@ -81,15 +81,31 @@ To ensure that cmake can find cryptoTools, you can either install cryptoTools or
  ## License
 This project is dual licensed under MIT and Unlicensed.
 
-For Unlicensed, this project has been placed in the public domain. As such, you are unrestricted in how you use it, 
-commercial or otherwise. However, no warranty of fitness is provided. If you found this project 
+For Unlicensed, this project has been placed in the public domain. As such, you are unrestricted in how you use it,
+commercial or otherwise. However, no warranty of fitness is provided. If you found this project
 helpful, feel free to spread the word and cite us.
- 
 
- 
- 
- 
+
+
+
+
 ## Help
- 
+
 Contact Peter Rindal peterrindal@gmail.com for any assistance on building or running the library.
- 
+
+
+## bazel build
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+  name = "github_com_cryptotools",
+  remote = "https://github.com/OpenMined/PSI",
+  branch = "bazel",
+)
+
+load("@github_com_cryptotools//bazel:preload.bzl", "cryptoTools_preload")
+cryptoTools_preload()
+
+load("@github_com_cryptotools//bazel:deps.bzl", "cryptoTools_deps")
+cryptoTools_deps()
+

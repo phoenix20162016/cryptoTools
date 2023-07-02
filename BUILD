@@ -1,70 +1,97 @@
 package(default_visibility = ["//visibility:public"])
 
-#load("@rules_foreign_cc//tools/build_defs:boost_build.bzl", "boost_build")
+config_setting(
+  name = "enable_sse",
+  values = {"define": "enable_sse=true"},
+)
 
-#boost_build(
-#    name = "boost_fiber",
-#    lib_source = "@boost//:all",
-#    static_libraries = ["libboost_fiber.a"],
-#    user_options = ["--with-fiber"],
-#    visibility = ["//visibility:public"],
-#    deps = [":boost_context"],
-#)
-
-#boost_build(
-#    name = "boost_context",
-#    lib_source = "@boost//:all",
-#    static_libraries = ["libboost_context.a"],
-#    user_options = ["--with-context"],
-#    visibility = ["//visibility:public"],
-#)
+GEN_CONFIG_H_CMD = select({
+  "enable_sse": (
+    """
+      set -x
+      tmpdir="cryptoTools.tmp"
+      mkdir -p "$${tmpdir}/cryptoTools/Common"
+      echo "#pragma once \r\n \
+    #define ENABLE_RELIC ON \r\n \
+    #define ENABLE_CIRCUITS ON \r\n \
+    #define ENABLE_SPAN_LITE ON \r\n \
+    #define ENABLE_CPP_14 ON \r\n \
+    #define ENABLE_BOOST ON \r\n \
+    #define ENABLE_CPP_14 ON \r\n \
+    #define ENABLE_SSE ON \r\n \
+    #define ENABLE_NET_LOG ON \r\n \
+    #define ENABLE_NASM ON \r\n \
+    #if (defined(_MSC_VER) || defined(__SSE2__)) && defined(ENABLE_SSE) \r\n \
+    #define ENABLE_SSE_BLAKE2 ON \r\n \
+    #define OC_ENABLE_SSE2 ON \r\n \
+    #endif \r\n \
+    #if (defined(_MSC_VER) || defined(__PCLMUL__)) && defined(ENABLE_SSE) \r\n \
+    #define OC_ENABLE_PCLMUL \r\n \
+    #endif \r\n \
+    #if (defined(_MSC_VER) || defined(__AES__)) && defined(ENABLE_SSE) \r\n \
+    #define OC_ENABLE_AESNI ON \r\n \
+    #else \r\n \
+    #define OC_ENABLE_PORTABLE_AES OFF \r\n \
+    #endif \r\n \
+    ">"$${tmpdir}"/cryptoTools/Common/config.h
+        ls -ltrh "$${tmpdir}"
+        mv "$${tmpdir}"/cryptoTools/Common/config.h $(location cryptoTools/Common/config.h)
+        rm -r -f -- "$${tmpdir}"
+    """),
+  "//conditions:default": (
+    """
+      set -x
+      tmpdir="cryptoTools.tmp"
+      mkdir -p "$${tmpdir}/cryptoTools/Common"
+      echo "#pragma once \r\n \
+    #define ENABLE_RELIC ON \r\n \
+    #define ENABLE_CIRCUITS ON \r\n \
+    #define ENABLE_SPAN_LITE ON \r\n \
+    #define ENABLE_CPP_14 ON \r\n \
+    #define ENABLE_BOOST ON \r\n \
+    #define ENABLE_CPP_14 ON \r\n \
+    #define ENABLE_NET_LOG ON \r\n \
+    #define ENABLE_NASM ON \r\n \
+    #if (defined(_MSC_VER) || defined(__SSE2__)) && defined(ENABLE_SSE) \r\n \
+    #define ENABLE_SSE_BLAKE2 ON \r\n \
+    #define OC_ENABLE_SSE2 ON \r\n \
+    #endif \r\n \
+    #if (defined(_MSC_VER) || defined(__PCLMUL__)) && defined(ENABLE_SSE) \r\n \
+    #define OC_ENABLE_PCLMUL \r\n \
+    #endif \r\n \
+    #if (defined(_MSC_VER) || defined(__AES__)) && defined(ENABLE_SSE) \r\n \
+    #define OC_ENABLE_AESNI ON \r\n \
+    #else \r\n \
+    #define OC_ENABLE_PORTABLE_AES OFF \r\n \
+    #endif \r\n \
+    ">"$${tmpdir}"/cryptoTools/Common/config.h
+        ls -ltrh "$${tmpdir}"
+        mv "$${tmpdir}"/cryptoTools/Common/config.h $(location cryptoTools/Common/config.h)
+        rm -r -f -- "$${tmpdir}"
+    """),
+})
 
 genrule(
   name = "cryptoTools_config_h",
   outs = [
     "cryptoTools/Common/config.h",
   ],
-  cmd = """
-      set -x
-      tmpdir="cryptoTools.tmp"
-      mkdir -p "$${tmpdir}/cryptoTools/Common"
-      echo "#pragma once \r\n \
-#define ENABLE_RELIC ON \r\n \
-#define ENABLE_CIRCUITS ON \r\n \
-#define ENABLE_SPAN_LITE ON \r\n \
-#define ENABLE_CPP_14 ON \r\n \
-#define ENABLE_BOOST ON \r\n \
-#define ENABLE_CPP_14 ON \r\n \
-#define ENABLE_NET_LOG ON \r\n \
-#define ENABLE_NASM ON \r\n \
-#if (defined(_MSC_VER) || defined(__SSE2__)) && defined(ENABLE_SSE) \r\n \
-#define ENABLE_SSE_BLAKE2 ON \r\n \
-#define OC_ENABLE_SSE2 ON \r\n \
-#endif \r\n \
-#if (defined(_MSC_VER) || defined(__PCLMUL__)) && defined(ENABLE_SSE) \r\n \
-#define OC_ENABLE_PCLMUL \r\n \
-#endif \r\n \
-#if (defined(_MSC_VER) || defined(__AES__)) && defined(ENABLE_SSE) \r\n \
-#define OC_ENABLE_AESNI ON \r\n \
-#else \r\n \
-#define OC_ENABLE_PORTABLE_AES OFF \r\n \
-#endif \r\n \
-">"$${tmpdir}"/cryptoTools/Common/config.h
-        ls -ltrh "$${tmpdir}"
-        mv "$${tmpdir}"/cryptoTools/Common/config.h $(location cryptoTools/Common/config.h)
-        rm -r -f -- "$${tmpdir}"
-    """,
+  cmd = GEN_CONFIG_H_CMD,
   visibility = ["//visibility:public"],
 )
 
-ENABLE_SSE_COPT = [
-  "-DENABLE_SSE=ON",
-  "-maes",
-  "-msse2",
-  "-msse3",
-  "-msse4.1",
-  "-mpclmul",
-]
+
+ENABLE_SSE_COPT = select({
+  "enable_sse": [
+    "-DENABLE_SSE=ON",
+    "-maes",
+    "-msse2",
+    "-msse3",
+    "-msse4.1",
+    "-mpclmul",
+  ],
+  "//conditions:default": []
+})
 
 ENABLE_RELIC_COPT = [
   #"-I@toolkit_relic//:relic/include",
@@ -75,6 +102,9 @@ ENABLE_RELIC_DEPS = [
   "@toolkit_relic//:relic",
 ]
 
+DEFAULT_C_OPT = ENABLE_SSE_COPT + ENABLE_RELIC_COPT
+DEFAILT_LINK_OPT = ENABLE_RELIC_DEPS
+
 cc_library(
   name = "libcryptoTools",
   srcs = glob([
@@ -84,6 +114,7 @@ cc_library(
     "cryptoTools/Crypto/blake2/c/*.c",
     "cryptoTools/Crypto/blake2/sse/*.c",
     "cryptoTools/Network/*.cpp"],
+    exclude = ["cryptoTools/Common/CuckooIndex.cpp"],
   ),
   hdrs = [":cryptoTools_config_h"] +
     glob([
@@ -93,20 +124,22 @@ cc_library(
       "cryptoTools/Crypto/*.h",
       "cryptoTools/Crypto/blake2/c/*.h",
       "cryptoTools/Crypto/blake2/sse/*.h",
-      "cryptoTools/Network/*.h"
-    ]),
+      "cryptoTools/Network/*.h"],
+      exclude = ["cryptoTools/Common/CuckooIndex.h"],
+    ),
   includes = [
     #"cryptoTools",
     ":cryptoTools_config_h"
   ],
   copts = [
+    "-Wall",
     "-O0 -g -ggdb -rdynamic",
     "-DENABLE_CIRCUITS=ON",
     "-DENABLE_BOOST=ON",
     "-DRAND=HASHD",
     "-DMULTI=PTHREAD",
     "-DBoost_USE_MULTITHREADED=ON"
-  ] + ENABLE_SSE_COPT + ENABLE_RELIC_COPT,
+  ] + DEFAULT_C_OPT,
   linkopts = ["-pthread"],
   # strip_include_prefix = "src",
   # Using an empty include_prefix causes Bazel to emit -I instead of -iquote
@@ -121,8 +154,7 @@ cc_library(
     "@boost//:system",
     "@boost//:circular_buffer",
     "@github_com_span_lite//:span_lite",
-    "@github_com_libdivide//:libdivide",
-  ] + ENABLE_RELIC_DEPS,
+  ] + DEFAILT_LINK_OPT,
 )
 
 cc_library(
@@ -138,12 +170,12 @@ cc_library(
     "-DENABLE_CIRCUITS=ON",
     "-DENABLE_BOOST=ON",
     "-DBoost_USE_MULTITHREADED=ON"
-  ] + ENABLE_SSE_COPT + ENABLE_RELIC_COPT,
+  ] + DEFAULT_C_OPT,
   linkopts = ["-pthread"],
   linkstatic = True,
   deps = [
     ":cryptoTools",
-  ] + ENABLE_RELIC_DEPS,
+  ] + DEFAILT_LINK_OPT,
 )
 
 cc_library(
@@ -160,14 +192,13 @@ cc_library(
     "-DENABLE_BOOST=ON",
     "-DBoost_USE_MULTITHREADED=ON",
     "-DENABLE_FULL_GSL=ON",
-    "-DENABLE_CPP_14=ON"
-  ] + ENABLE_SSE_COPT + ENABLE_RELIC_COPT,
+  ] + DEFAULT_C_OPT,
   linkopts = ["-pthread -lstdc++"],
   linkstatic = True,
   deps = [
     ":cryptoTools",
     ":tests_cryptoTools",
-  ] + ENABLE_RELIC_DEPS,
+  ] + DEFAILT_LINK_OPT,
 )
 
 cc_binary(
@@ -188,6 +219,6 @@ cc_binary(
     ":lib_frontend_cryptoTools",
     ":cryptoTools",
     ":tests_cryptoTools",
-  ] + ENABLE_RELIC_DEPS,
+  ] + DEFAILT_LINK_OPT,
 )
 
