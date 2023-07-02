@@ -220,3 +220,5 @@ CodeDB
 LinuxFrontEnd/VisualGDBCache
 testout.txt
 lib
+
+bazel-*

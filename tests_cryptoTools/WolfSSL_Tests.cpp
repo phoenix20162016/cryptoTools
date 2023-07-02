@@ -21,8 +21,8 @@
 #include <thread>
 
 #include <cryptoTools/Network/TLS.h>
-#include <cryptoTools/Network/IOService.h>
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Network/IOService.h"
+#include "cryptoTools/Common/Log.h"
 #include <cryptoTools/Common/TestCollection.h>
 using namespace oc;
 
@@ -73,7 +73,7 @@ int client()
     std::array<char, SVR_COMMAND_SIZE> msg;
     std::array<char, SVR_COMMAND_SIZE> reply;
 
-    
+
 
     //while (fgets(msg.data(), sizeof(msg), stdin) != 0) {
     for(u64 i =0; i < trials; ++i){
@@ -159,12 +159,12 @@ int server()
     WolfContext ctx;
     ctx.init(WolfContext::Mode::Server,ec);
     if (ec) throwEC(ec);
-    
+
     ctx.loadKeyPair(sample_server_cert_pem, sample_server_key_pem, ec);
 
     if (ec)
     {
-        lout << "failed to load server keys\n" 
+        lout << "failed to load server keys\n"
             << "ec = " << ec.message() << std::endl;
         throw RTE_LOC;
     }
@@ -328,10 +328,10 @@ void wolfSSL_mutualAuth_test(const osuCrypto::CLP& cmd)
     csock.mSock.connect(addr, ec);
     if (ec) throwEC(ec);
     std::promise<error_code> prom;
-    csock.async_connect([&](const error_code& ec) { 
-        prom.set_value(ec); 
+    csock.async_connect([&](const error_code& ec) {
+        prom.set_value(ec);
         });
-    
+
     WolfSocket ssock(ios.mIoService, sctx);
     ssock.setDHParam(sample_dh2048_pem, ec);
     if (ec) throwEC(ec);
@@ -340,7 +340,7 @@ void wolfSSL_mutualAuth_test(const osuCrypto::CLP& cmd)
     if (ec) throwEC(ec);
     ssock.accept(ec);
     if (ec) { std::cout << "accept failed: " << ec.message() << std::endl; throwEC(ec); }
-    
+
     ec = prom.get_future().get();
     if (ec) { std::cout << "connect failed: " << ec.message() << std::endl; throwEC(ec); }
 
@@ -384,7 +384,7 @@ void wolfSSL_channel_test(const osuCrypto::CLP& cmd)
 
     if (ec) throwEC(ec);
 
-    //wolfSSL_CTX_set_verify(cctx.mBase->mCtx, SSL_VERIFY_FAIL_IF_NO_PEER_CERT, 
+    //wolfSSL_CTX_set_verify(cctx.mBase->mCtx, SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
     //    [](int i, WOLFSSL_X509_STORE_CTX* c) {
 
     //        return i;

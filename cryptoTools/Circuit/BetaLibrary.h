@@ -1,10 +1,10 @@
 #pragma once
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 #ifdef ENABLE_CIRCUITS
 
 #include "BetaCircuit.h"
 #include <unordered_map>
-#include <cryptoTools/Common/BitVector.h>
+#include "cryptoTools/Common/BitVector.h"
 
 namespace osuCrypto
 {

@@ -1,9 +1,9 @@
 #pragma once
-// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use. 
+// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
 
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Crypto/RandomOracle.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Crypto/RandomOracle.h"
 #include <iostream>
 
 namespace osuCrypto {
@@ -12,34 +12,34 @@ namespace osuCrypto {
 static_assert(RandomOracle::HashSize == sizeof(u32) * COMMIT_BUFF_u32_SIZE, "buffer need to be the same size as hash size");
 
 
-class Commit 
+class Commit
     {
     public:
 
 		// Default constructor of a Commitment. The state is undefined.
 		Commit() = default;
 
-		// Compute a randomized commitment of input. 
+		// Compute a randomized commitment of input.
 		Commit(const block& in, PRNG& prng)
         {
             block rand = prng.get<block>();
             hash((u8*)(&in), sizeof(block), rand);
         }
 
-		// Compute a randomized commitment of input. 
+		// Compute a randomized commitment of input.
         Commit(const block& in, block& rand)
         {
              hash((u8*)(&in), sizeof(block), rand);
         }
 
-		// Compute a randomized commitment of input. 
+		// Compute a randomized commitment of input.
 		Commit(const span<u8> in, PRNG& prng)
         {
             block rand = prng.get<block>();
              hash(in.data(), in.size(), rand);
         }
-		
-		// Compute a randomized commitment of input. 
+
+		// Compute a randomized commitment of input.
 		Commit(const span<u8> in, block& rand)
         {
              hash(in.data(), in.size(), rand);
@@ -47,12 +47,12 @@ class Commit
 
 
 
-		// Compute a non-randomized commitment of input. 
-		// Note: insecure if input has low entropy. 
+		// Compute a non-randomized commitment of input.
+		// Note: insecure if input has low entropy.
 		Commit(const block& input) { hash((u8*)(&input), sizeof(block)); }
 
-		// Compute a non-randomized commitment of input. 
-		// Note: insecure if input has low entropy. 
+		// Compute a non-randomized commitment of input.
+		// Note: insecure if input has low entropy.
 		Commit(const std::array<block, 3>& input)
 		{
 			hash((u8*)(&input[0]), sizeof(block));
@@ -60,16 +60,16 @@ class Commit
 			hash((u8*)(&input[2]), sizeof(block));
 		}
 
-		// Compute a non-randomized commitment of input. 
-		// Note: insecure if input has low entropy. 
+		// Compute a non-randomized commitment of input.
+		// Note: insecure if input has low entropy.
 		Commit(const span<u8> in)
         {
             hash(in.data(), in.size());
         }
 
 
-		// Compute a non-randomized commitment of input. 
-		// Note: insecure if input has low entropy. 
+		// Compute a non-randomized commitment of input.
+		// Note: insecure if input has low entropy.
         Commit(u8* d, u64 s)
         {
             hash(d, s);

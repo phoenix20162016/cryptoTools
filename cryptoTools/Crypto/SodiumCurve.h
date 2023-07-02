@@ -1,14 +1,14 @@
 #pragma once
 
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 
 #ifdef ENABLE_SODIUM
 
 #include <string.h>
 #include <type_traits>
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Crypto/Rijndael256.h>
-#include <cryptoTools/Crypto/RandomOracle.h>
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Crypto/Rijndael256.h"
+#include "cryptoTools/Crypto/RandomOracle.h"
 #include <sodium.h>
 
 namespace osuCrypto

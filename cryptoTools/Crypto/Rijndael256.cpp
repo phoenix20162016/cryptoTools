@@ -1,4 +1,4 @@
-#include <cryptoTools/Crypto/Rijndael256.h>
+#include "cryptoTools/Crypto/Rijndael256.h"
 
 #ifdef OC_ENABLE_AESNI
 #include <array>

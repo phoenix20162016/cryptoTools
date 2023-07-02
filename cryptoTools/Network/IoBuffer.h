@@ -1,23 +1,23 @@
 #pragma once
-// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use. 
+// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
 #include <cryptoTools/Common/config.h>
 #ifdef ENABLE_BOOST
 
 
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 
-#include <string> 
-#include <future> 
-#include <cassert> 
-#include <functional> 
-#include <memory> 
+#include <string>
+#include <future>
+#include <cassert>
+#include <functional>
+#include <memory>
 #include <boost/asio.hpp>
 #include <system_error>
 #include  <type_traits>
 #include <list>
 #include <boost/variant.hpp>
 #ifdef ENABLE_NET_LOG
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Common/Log.h"
 #endif
 
 //#define ENABLE_NET_LOG
@@ -111,7 +111,7 @@ namespace osuCrypto
 #define _SILENCE_CXX20_IS_POD_DEPRECATION_WARNING
 
     /// type trait that defines what is considered a STL like Container
-    /// 
+    ///
     /// Must have the following member types:  pointer, size_type, value_type
     /// Must have the following member functions:
     ///    * Container::pointer Container::data();
@@ -132,7 +132,7 @@ namespace osuCrypto
         ,
         void>;
 
-    // A class template that allows fewer than the specified number of bytes to be received. 
+    // A class template that allows fewer than the specified number of bytes to be received.
     template<typename T>
     class ReceiveAtMost
     {
@@ -145,9 +145,9 @@ namespace osuCrypto
         u64 mMaxReceiveSize, mTrueReceiveSize;
 
 
-        // A constructor that takes the loction to be written to and 
-        // the maximum number of T's that should be written. 
-        // Call 
+        // A constructor that takes the loction to be written to and
+        // the maximum number of T's that should be written.
+        // Call
         ReceiveAtMost(T* dest, u64 maxReceiveCount)
             : mData(dest)
             , mMaxReceiveSize(maxReceiveCount)
@@ -185,7 +185,7 @@ namespace osuCrypto
     {
     public:
         u64 mSize;
-        
+
         BadReceiveBufferSize(const std::string& what, u64 length)
             :
             std::runtime_error(what),
@@ -240,13 +240,13 @@ namespace osuCrypto
             // perform the operation
             virtual void asyncPerform(ChannelBase* base, io_completion_handle&& completionHandle) = 0;
 
-            // cancel the operation, this is called durring or after asyncPerform 
+            // cancel the operation, this is called durring or after asyncPerform
             // has been called. If after then it should be a no-op.
             virtual void asyncCancelPending(ChannelBase* base, const error_code& ec) = 0;
 
-            // cancel the operation, this is called before asyncPerform. 
-            virtual void asyncCancel(ChannelBase* base, const error_code& ec, io_completion_handle&& completionHandle) = 0; 
-            // { 
+            // cancel the operation, this is called before asyncPerform.
+            virtual void asyncCancel(ChannelBase* base, const error_code& ec, io_completion_handle&& completionHandle) = 0;
+            // {
             //     auto ec2 = boost::system::errc::make_error_code(boost::system::errc::success);
             //     completionHandle(ec2, 0);
             // }
@@ -286,7 +286,7 @@ namespace osuCrypto
 
             std::string toString() const override
             {
-                return std::string("CallbackOp #") 
+                return std::string("CallbackOp #")
     #ifdef ENABLE_NET_LOG
                     + std::to_string(Base::mIdx)
     #endif
@@ -299,8 +299,8 @@ namespace osuCrypto
 
         using size_header_type = u32;
 
-        // A class for sending or receiving data over a channel. 
-        // Datam sent/received with this type sent over the network 
+        // A class for sending or receiving data over a channel.
+        // Datam sent/received with this type sent over the network
         // with a header denoting its size in bytes.
         class BasicSizedBuff
         {
@@ -365,7 +365,7 @@ namespace osuCrypto
             FixedSendBuff(FixedSendBuff&& v) = default;
 
             void asyncPerform(ChannelBase* base, io_completion_handle&& completionHandle) override;
-            
+
             void asyncCancelPending(ChannelBase* base, const error_code& ec) override {}
 
             void asyncCancel(ChannelBase* base, const error_code&, io_completion_handle&& completionHandle) override {
@@ -476,7 +476,7 @@ namespace osuCrypto
                 mPromise.set_exception(std::make_exception_ptr(std::runtime_error(ec.message())));
                 completionHandle(ec, 0);
             }
-            
+
             void asyncCancelPending(ChannelBase* base, const error_code& ec) override {}
 
 
@@ -593,7 +593,7 @@ namespace osuCrypto
 
                 T::asyncCancel(base, ec, std::forward<io_completion_handle>(completionHandle));
             }
-            
+
             void asyncCancelPending(ChannelBase* base, const error_code& ec) override {}
 
         };

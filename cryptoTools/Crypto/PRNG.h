@@ -1,10 +1,10 @@
 #pragma once
 // This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Crypto/AES.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Crypto/AES.h"
 #include <vector>
 #include <cstring>
-#include <cryptoTools/Common/Aligned.h>
+#include "cryptoTools/Common/Aligned.h"
 
 namespace osuCrypto
 {
@@ -18,7 +18,7 @@ namespace osuCrypto
         // SetSeed(...) must be called before get(...)
         PRNG() = default;
 
-        // explicit constructor to initialize the PRNG with the 
+        // explicit constructor to initialize the PRNG with the
         // given seed and to buffer bufferSize number of AES block
         PRNG(const block& seed, u64 bufferSize = 256);
 
@@ -60,7 +60,7 @@ namespace osuCrypto
         }
 
         // Templated function that returns the a random element
-        // of the given type T. 
+        // of the given type T.
         // Required: T must be a POD type.
         template<typename T>
         typename std::enable_if<
@@ -80,8 +80,8 @@ namespace osuCrypto
             return ret;
         }
 
-        // Templated function that fills the provided buffer 
-        // with random elements of the given type T. 
+        // Templated function that fills the provided buffer
+        // with random elements of the given type T.
         // Required: T must be a POD type.
         template<typename T>
 		typename std::enable_if<
@@ -97,8 +97,8 @@ namespace osuCrypto
 
         void implGet(u8* datau8, u64 lengthu8);
 
-		// Templated function that fills the provided buffer 
-		// with random elements of the given type T. 
+		// Templated function that fills the provided buffer
+		// with random elements of the given type T.
 		// Required: T must be a POD type.
 		template<typename T>
 		typename std::enable_if<
@@ -109,10 +109,10 @@ namespace osuCrypto
 			get(dest.data(), dest.size());
 		}
 
-        // returns the buffer of maximum maxSize bytes or however 
-        // many the internal buffer has, which ever is smaller. The 
-        // returned bytes are "consumed" and will not be used on 
-        // later calls to get*(...). Note, buffer may be invalidated 
+        // returns the buffer of maximum maxSize bytes or however
+        // many the internal buffer has, which ever is smaller. The
+        // returned bytes are "consumed" and will not be used on
+        // later calls to get*(...). Note, buffer may be invalidated
         // on the next call to get*(...) or destruction.
         span<u8> getBufferSpan(u64 maxSize)
         {

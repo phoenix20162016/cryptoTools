@@ -1,9 +1,9 @@
 #pragma once
 // This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Common/BitIterator.h>
-#include <cryptoTools/Crypto/PRNG.h>
-#include <cryptoTools/Network/IoBuffer.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Common/BitIterator.h"
+#include "cryptoTools/Crypto/PRNG.h"
+#include "cryptoTools/Network/IoBuffer.h"
 
 namespace osuCrypto {
 

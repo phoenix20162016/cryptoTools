@@ -3,8 +3,8 @@
 #include <list>
 #include <functional>
 #include <string>
-#include <cryptoTools/Common/Defines.h>
-//#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
+//#include "cryptoTools/Common/Defines.h"
 
 //#define OSU_CRYPTO_PP_CAT(a, b) OSU_CRYPTO_PP_CAT_I(a, b)
 //#define OSU_CRYPTO_PP_CAT_I(a, b) OSU_CRYPTO_PP_CAT_II(~, a ## b)
@@ -12,10 +12,10 @@
 //#define OSU_CRYPTO_UNIQUE_NAME(base) OSU_CRYPTO_PP_CAT(base, __COUNTER__)
 //
 //
-#define OSU_CRYPTO_ADD_TEST(harness, test)       
-//static int OSU_CRYPTO_UNIQUE_NAME(__add_test_) = []() { 
-//    harness.add(STRINGIZE(test), test);          
-//    return 0;                                    
+#define OSU_CRYPTO_ADD_TEST(harness, test)
+//static int OSU_CRYPTO_UNIQUE_NAME(__add_test_) = []() {
+//    harness.add(STRINGIZE(test), test);
+//    return 0;
 //}();
 
 namespace osuCrypto
@@ -29,7 +29,7 @@ namespace osuCrypto
             std::string mName;
             std::function<void(const CLP&)> mTest;
         };
-        TestCollection() = default; 
+        TestCollection() = default;
         TestCollection(std::function<void(TestCollection&)> init)
         {
             init(*this);

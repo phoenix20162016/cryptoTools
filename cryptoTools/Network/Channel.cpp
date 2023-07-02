@@ -2,18 +2,18 @@
 #include <cryptoTools/Common/config.h>
 #ifdef ENABLE_BOOST
 
-#include <cryptoTools/Network/Channel.h>
-#include <cryptoTools/Network/Session.h>
-#include <cryptoTools/Network/SocketAdapter.h>
-#include <cryptoTools/Common/Log.h>
-#include <cryptoTools/Common/Timer.h>
-#include <cryptoTools/Network/IOService.h>
+#include "cryptoTools/Network/Channel.h"
+#include "cryptoTools/Network/Session.h"
+#include "cryptoTools/Network/SocketAdapter.h"
+#include "cryptoTools/Common/Log.h"
+#include "cryptoTools/Common/Timer.h"
+#include "cryptoTools/Network/IOService.h"
 #include <thread>
 #include <chrono>
 
 namespace osuCrypto {
 
- 
+
 
 #ifdef ENABLE_NET_LOG
 #define LOG_MSG(m) mLog.push(m);
@@ -21,7 +21,7 @@ namespace osuCrypto {
 
 #else
 #define LOG_MSG(m)
-#define IF_LOG(m) 
+#define IF_LOG(m)
 #endif
 
     auto startTime = std::chrono::system_clock::time_point::clock::now();
@@ -80,7 +80,7 @@ namespace osuCrypto {
         std::string remoteName)
         :
         mIos(endpoint.getIOService()),
-        mWork(endpoint.getIOService(), "Channel:" + endpoint.mBase->mName + "." + localName 
+        mWork(endpoint.getIOService(), "Channel:" + endpoint.mBase->mName + "." + localName
             + (endpoint.mBase->mMode == SessionMode::Server ? " (server)" : " (client)")),
         mSession(endpoint.mBase),
         mRemoteName(remoteName),
@@ -156,13 +156,13 @@ namespace osuCrypto {
     void StartSocketOp::cancelPending(bool sendOp)
     {
         IF_LOG(mChl->mLog.push("calling StartSocketOp::cancel(...), sender=" +std::to_string(sendOp)+ ", t=" + time()));
-        
+
         auto lifetime = mChl->shared_from_this();
         boost::asio::post(mStrand, [this, lifetime,sendOp]() {
 
-            // While posting this cancel request, the other queue 
+            // While posting this cancel request, the other queue
             // (send or recv) may have already canceled the operation.
-            // Aternatively, we may have completed while in the mean 
+            // Aternatively, we may have completed while in the mean
             // time in which case we ignore the cancel.
             if (mFinalized == false && canceled() == false)
             {
@@ -175,17 +175,17 @@ namespace osuCrypto {
 #ifdef ENABLE_WOLFSSL
                 if (mTLSSock)
                 {
-                    // If this unique_ptr is set, then we are 
+                    // If this unique_ptr is set, then we are
                     // currently doing the TLS handshake. Calling
                     // close on it will cancel the operation and
                     // then it will call finalize with an error.
                     mTLSSock->close();
                 }
-                else 
+                else
 #endif
                 if (mChl->mSession->mAcceptor)
                 {
-                    // If we are still waiting for the socket from 
+                    // If we are still waiting for the socket from
                     // the acceptor, then tell it to cancel that
                     // request.
                     mChl->mSession->mAcceptor->cancelPendingChannel(mChl->shared_from_this());
@@ -219,7 +219,7 @@ namespace osuCrypto {
                 else
                 {
                     // At the same time that we called cancel(), the
-                    // Acceptor made this call to setSocket(...). 
+                    // Acceptor made this call to setSocket(...).
                     // Let us ignore this one and wait for the next call
                     // to setSocket() that Acceptor::cancelPendingChannel(...)
                     // is going to make.
@@ -231,15 +231,15 @@ namespace osuCrypto {
             if (mChl->mSession->mTLSContext && !ec)
             {
                 assert(s && "socket was null but no error code");
-                
+
                 mTLSSock.reset(new TLSSocket(mChl->mIos.mIoService, std::move(s->mSock), mChl->mSession->mTLSContext));
-                
+
                 IF_LOG(mTLSSock->setLog(mChl->mLog));
 
                 if (mChl->mSession->mMode == SessionMode::Client)
                 {
                     IF_LOG(mChl->mLog.push("tls async_connect()"));
-                    mTLSSock->async_connect([this](const error_code& ec) 
+                    mTLSSock->async_connect([this](const error_code& ec)
                     {
                         //validateID(mTL)
                         //TODO("send a hash of the connection string to make sure that things have not changed by the Adv.");
@@ -280,18 +280,18 @@ namespace osuCrypto {
             else
             {
                 std::array<boost::asio::mutable_buffer,1> buf;
-              
+
                 if(mChl->mSession->mMode == SessionMode::Client)
                 {
-                    buf[0] = boost::asio::mutable_buffer((char*)&mChl->mSession->mTLSSessionID, sizeof(mChl->mSession->mTLSSessionID)); 
+                    buf[0] = boost::asio::mutable_buffer((char*)&mChl->mSession->mTLSSessionID, sizeof(mChl->mSession->mTLSSessionID));
                     mTLSSock->async_send(buf, [this](const error_code& ec, u64 bt){
                         finalize(std::move(mTLSSock), ec);
                     });
-                } 
-                else 
+                }
+                else
                 {
-                    
-                    buf[0] = boost::asio::mutable_buffer((char*)&mTLSSessionIDBuf, sizeof(mTLSSessionIDBuf)); 
+
+                    buf[0] = boost::asio::mutable_buffer((char*)&mTLSSessionIDBuf, sizeof(mTLSSessionIDBuf));
                     mTLSSock->async_recv(buf, [this](const error_code& ec_, u64 bt){
                         auto ec = ec_;
 
@@ -302,11 +302,11 @@ namespace osuCrypto {
                             {
                                 mChl->mSession->mTLSSessionIDIsSet = true;
                                 mChl->mSession->mTLSSessionID = mTLSSessionIDBuf;
-                            } 
+                            }
                             else if(neq(mTLSSessionIDBuf, mChl->mSession->mTLSSessionID))
                                 ec = make_error_code(TLS_errc::SessionIDMismatch);
-                        } 
-                        
+                        }
+
                         finalize(std::move(mTLSSock), ec);
                     });
                 }
@@ -367,7 +367,7 @@ namespace osuCrypto {
         {
             mChl->mIos.printError("client socket connect error (hangs).");
         }
-        
+
         mIsFirst = true;
         mTimer.expires_from_now(boost::posix_time::millisec(count));
         mTimer.async_wait([this](const error_code& ec) {
@@ -444,7 +444,7 @@ namespace osuCrypto {
             }
         );
     }
-    
+
     void StartSocketOp::recvServerMessage()
     {
         auto buffer = boost::asio::buffer((char*)&mRecvChar, 1);
@@ -510,7 +510,7 @@ namespace osuCrypto {
                         mChl->mLog.push(msg)
                     );
 
-                    // Unknown issue where we connect but then the pipe is broken. 
+                    // Unknown issue where we connect but then the pipe is broken.
                     // Simply retrying seems to be a workaround.
                     retryConnect(ec);
                 }
@@ -770,10 +770,10 @@ namespace osuCrypto {
 
             if (startSending)
             {
-                assert(mStatus != Channel::Status::Closed); 
+                assert(mStatus != Channel::Status::Closed);
                 mSendLoopLifetime = std::move(lifetime);
                 asyncPerformSend();
-            } 
+            }
             else
             {
                 LOG_MSG("send defered "+str+": " + std::to_string(hasItems) + " && " + std::to_string(available));
@@ -841,7 +841,7 @@ namespace osuCrypto {
     {
         LOG_MSG("send start: " + mSendQueue.front()->toString());
         assert(mStrand.running_in_this_thread());
-    
+
 #ifdef ENABLE_NET_LOG
         mSendQueue.front()->mLog = &mLog;
 #endif
@@ -1028,7 +1028,7 @@ namespace osuCrypto {
 
             sendEnque(make_SBO_ptr<details::SendOperation, details::SendCallbackOp>(cb));
             recvEnque(make_SBO_ptr<details::RecvOperation, details::RecvCallbackOp>(cb));
-     
+
         }
         else
         {
@@ -1062,7 +1062,7 @@ namespace osuCrypto {
                     LOG_MSG("send cancel op: " + std::to_string(front->mIdx));
                     mSendQueue.pop_front();
 
-       
+
                     cancelSendQueue(ec);
 
                     });

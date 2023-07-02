@@ -1,6 +1,6 @@
 #include "Misc_Tests.h"
 
-#include <cryptoTools/Common/BitVector.h>
+#include "cryptoTools/Common/BitVector.h"
 #include "Common.h"
 
 using namespace osuCrypto;

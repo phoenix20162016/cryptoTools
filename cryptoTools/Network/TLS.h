@@ -6,8 +6,8 @@
 #include <string>
 #include <boost/system/error_code.hpp>
 #include <boost/asio/strand.hpp>
-#include <cryptoTools/Network/SocketAdapter.h>
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Network/SocketAdapter.h"
+#include "cryptoTools/Common/Log.h"
 #include <memory>
 
 #ifndef WC_NO_HARDEN
@@ -183,7 +183,7 @@ namespace osuCrypto
 
 
         bool isInit() const {
-            return mBase != nullptr;                
+            return mBase != nullptr;
         }
         Mode mode() const {
             if (isInit())
@@ -285,7 +285,7 @@ namespace osuCrypto
         void close() override;
 
         void cancel() override;
-        
+
         void async_send(
             span<buffer> buffers,
             io_completion_handle&& fn) override;
@@ -320,7 +320,7 @@ namespace osuCrypto
             span<buffer> buffers,
             error_code& ec,
             u64& bt);
-        
+
 
         void recvNext();
 

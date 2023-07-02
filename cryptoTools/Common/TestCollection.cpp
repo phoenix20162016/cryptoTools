@@ -1,8 +1,8 @@
 #include "TestCollection.h"
 
 
-#include <cryptoTools/Common/Log.h>
-#include <cryptoTools/Common/CLP.h>
+#include "cryptoTools/Common/Log.h"
+#include "cryptoTools/Common/CLP.h"
 #include <iomanip>
 #include <cmath>
 #include <algorithm>
@@ -103,7 +103,7 @@ namespace osuCrypto
 
             if (numSkipped)
                 std::cout << Color::Yellow << "            skipped (" << numSkipped << ")\n";
-            
+
             std::cout << Color::Red
                 << "#############################################" << std::endl << ColorDefault;
             return Result::failed;

@@ -2,7 +2,7 @@
 
 #include <cryptoTools/Common/config.h>
 
-#include <cryptoTools/Common/CLP.h>
+#include "cryptoTools/Common/CLP.h"
 #include <cryptoTools/Common/TestCollection.h>
 
 namespace tests_cryptoTools
@@ -75,6 +75,6 @@ namespace tests_cryptoTools
     inline void BtNetwork_queue_Test(const osuCrypto::CLP& cmd) { np(); }
     inline void BtNetwork_socketAdapter_test(const osuCrypto::CLP& cmd) { np(); }
     inline void BtNetwork_BasicSocket_test(const osuCrypto::CLP& cmd) { np(); };
-    
+
 #endif
 }

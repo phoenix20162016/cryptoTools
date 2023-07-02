@@ -1,5 +1,5 @@
-#include <cryptoTools/Common/Log.h>
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Log.h"
+#include "cryptoTools/Common/Defines.h"
 #include <iostream>
 #ifdef _MSC_VER
 #include <windows.h>

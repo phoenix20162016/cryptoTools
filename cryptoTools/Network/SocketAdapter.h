@@ -3,7 +3,7 @@
 #ifdef ENABLE_BOOST
 
 #include <boost/asio.hpp>
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 #include "IoBuffer.h"
 #include <iostream>
 #include "util.h"
@@ -32,7 +32,7 @@ namespace osuCrypto
         // @buffers [output]: is the vector of buffers that should be recved.
         // @fn [input]:   A call back that should be called on completion of the IO.
         virtual void async_recv(
-            span<boost::asio::mutable_buffer> buffers, 
+            span<boost::asio::mutable_buffer> buffers,
             io_completion_handle&& fn) = 0;
 
         // REQUIRED -- buffers contains a list of buffers that are allocated
@@ -53,7 +53,7 @@ namespace osuCrypto
             std::terminate();
         };
 
-        // OPTIONAL -- no-op close is default. Will be called right after 
+        // OPTIONAL -- no-op close is default. Will be called right after
         virtual void async_accept(completion_handle&& fn)
         {
             error_code ec;
@@ -91,7 +91,7 @@ namespace osuCrypto
         void setIOService(IOService& ios) override { mIos = &ios; }
 
         void async_send(
-            span<boost::asio::mutable_buffer> buffers, 
+            span<boost::asio::mutable_buffer> buffers,
             io_completion_handle&& fn) override
         {
             post(mIos, [this, buffers, fn]() {
@@ -103,11 +103,11 @@ namespace osuCrypto
                         auto data = boost::asio::buffer_cast<u8*>(buffers[i]);
                         auto size = boost::asio::buffer_size(buffers[i]);
 
-                        // NOTE: I am assuming that this is blocking. 
-                        // Blocking here cause the networking code to deadlock 
+                        // NOTE: I am assuming that this is blocking.
+                        // Blocking here cause the networking code to deadlock
                         // in some senarios. E.g. all threads blocks on recving data
-                        // that is not being sent since the threads are blocks. 
-                        // Make sure to give the IOService enought threads or make this 
+                        // that is not being sent since the threads are blocks.
+                        // Make sure to give the IOService enought threads or make this
                         // non blocking somehow.
                         mChl.send(data, size);
                         bytesTransfered += size;
@@ -124,7 +124,7 @@ namespace osuCrypto
         }
 
         void async_recv(
-            span<boost::asio::mutable_buffer> buffers, 
+            span<boost::asio::mutable_buffer> buffers,
             io_completion_handle&& fn) override
         {
             post(mIos, [this, buffers, fn]() {
@@ -136,11 +136,11 @@ namespace osuCrypto
                         auto data = boost::asio::buffer_cast<u8*>(buffers[i]);
                         auto size = boost::asio::buffer_size(buffers[i]);
 
-                        // Note that I am assuming that this is blocking. 
-                        // Blocking here cause the networking code to deadlock 
+                        // Note that I am assuming that this is blocking.
+                        // Blocking here cause the networking code to deadlock
                         // in some senarios. E.g. all threads blocks on recving data
-                        // that is not being sent since the threads are blocks. 
-                        // Make sure to give the IOService enought threads or make this 
+                        // that is not being sent since the threads are blocks.
+                        // Make sure to give the IOService enought threads or make this
                         // non blocking somehow.
                         mChl.recv(data, size);
                         bytesTransfered += size;
@@ -300,7 +300,7 @@ namespace osuCrypto
         {
             return new Socket(this);
         }
-         
+
         void signal()
         {
             mCV.notify_all();
@@ -344,8 +344,8 @@ namespace osuCrypto
         void close() override {
 			boost::system::error_code ec;
 			mSock.close(ec);
-			if (ec) 
-                std::cout <<"BoostSocketInterface::close() error: "<< ec.message() << std::endl; 
+			if (ec)
+                std::cout <<"BoostSocketInterface::close() error: "<< ec.message() << std::endl;
 		}
 
         void cancel() override
@@ -359,8 +359,8 @@ namespace osuCrypto
 			mSock.cancel(ec);
 #endif
 
-			if (ec) 
-                std::cout <<"BoostSocketInterface::cancel() error: "<< ec.message() << std::endl; 
+			if (ec)
+                std::cout <<"BoostSocketInterface::cancel() error: "<< ec.message() << std::endl;
         }
 
         void async_recv(span<boost::asio::mutable_buffer> buffers, io_completion_handle&& fn) override

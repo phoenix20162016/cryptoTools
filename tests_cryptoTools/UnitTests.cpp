@@ -1,4 +1,4 @@
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Common/Log.h"
 #include <functional>
 
 #include "tests_cryptoTools/AES_Tests.h"
@@ -45,7 +45,7 @@ namespace tests_cryptoTools
         th.add("BtNetwork_queue_Test                    ", BtNetwork_queue_Test);
         th.add("BtNetwork_socketAdapter_test            ", BtNetwork_socketAdapter_test);
         th.add("BtNetwork_BasicSocket_test              ", BtNetwork_BasicSocket_test);
-        
+
         th.add("wolfSSL_echoServer_test                 ", wolfSSL_echoServer_test);
         th.add("wolfSSL_mutualAuth_test                 ", wolfSSL_mutualAuth_test);
         th.add("wolfSSL_channel_test                    ", wolfSSL_channel_test);
@@ -62,7 +62,7 @@ namespace tests_cryptoTools
         th.add("BitVector_Append_Test                   ", BitVector_Append_Test_Impl);
         th.add("BitVector_Copy_Test                     ", BitVector_Copy_Test_Impl);
         th.add("BitVector_Resize_Test                   ", BitVector_Resize_Test_Impl);
-        
+
         th.add("CuckooIndex_many_Test                   ", CuckooIndex_many_Test_Impl);
         th.add("CuckooIndex_paramSweep_Test             ", CuckooIndex_paramSweep_Test_Impl);
         th.add("CuckooIndex_parallel_Test               ", CuckooIndex_parallel_Test_Impl);
@@ -80,7 +80,7 @@ namespace tests_cryptoTools
         th.add("BetaCircuit_uint_Subtractor_Test        ", BetaCircuit_uint_Subtractor_Test);
         th.add("BetaCircuit_int_Multiply_Test           ", BetaCircuit_int_Multiply_Test);
         th.add("BetaCircuit_uint_Multiply_Test          ", BetaCircuit_uint_Multiply_Test);
-        
+
         th.add("BetaCircuit_int_LessThan_Test           ", BetaCircuit_int_LessThan_Test);
         th.add("BetaCircuit_int_GreaterThanEq_Test      ", BetaCircuit_int_GreaterThanEq_Test);
         th.add("BetaCircuit_uint_LessThan_Test          ", BetaCircuit_uint_LessThan_Test);
@@ -96,7 +96,7 @@ namespace tests_cryptoTools
         th.add("BetaCircuit_json_Tests                  ", BetaCircuit_json_Tests);
         th.add("BetaCircuit_bin_Tests                   ", BetaCircuit_bin_Tests);
         th.add("BetaCircuit_xor_and_lvl_test            ", BetaCircuit_xor_and_lvl_test);
-        
+
         th.add("BetaCircuit_aes_test                    ", BetaCircuit_aes_test);
         //th.add("BetaCircuit_aes_sbox_test               ", BetaCircuit_aes_sbox_test);
         //th.add("BetaCircuit_aes_shiftRows_test          ", BetaCircuit_aes_shiftRows_test);

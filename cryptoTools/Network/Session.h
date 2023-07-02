@@ -1,10 +1,10 @@
 #pragma once
-// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.  
+// This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
 #include <cryptoTools/Common/config.h>
 #ifdef ENABLE_BOOST
 
 #include "cryptoTools/Common/Defines.h"
-#include <cryptoTools/Network/Channel.h>
+#include "cryptoTools/Network/Channel.h"
 
 #include <string>
 #include <list>
@@ -88,17 +88,17 @@ namespace osuCrypto {
 
 	typedef Session Endpoint;
 	class IOService;
-	
+
 	struct SessionBase
 	{
 		SessionBase(IOService& ios);
 		~SessionBase();
 
 		void stop();
-		//  Removes the channel with chlName. 
+		//  Removes the channel with chlName.
 		//void removeChannel(ChannelBase* chl);
 
-		// if this channnel is waiting on a socket, cancel that 
+		// if this channnel is waiting on a socket, cancel that
 		// operation and set the future to contain an exception
 		//void cancelPendingConnection(ChannelBase* chl);
 

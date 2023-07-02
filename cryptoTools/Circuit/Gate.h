@@ -1,5 +1,5 @@
 #pragma once
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 #ifdef ENABLE_CIRCUITS
 #include <vector>
 #include <array>

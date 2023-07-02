@@ -3,13 +3,13 @@
 #include <cryptoTools/Common/config.h>
 #ifdef ENABLE_BOOST
 
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Network/IoBuffer.h>
-#include <cryptoTools/Network/SocketAdapter.h>
-#include <cryptoTools/Network/util.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Network/IoBuffer.h"
+#include "cryptoTools/Network/SocketAdapter.h"
+#include "cryptoTools/Network/util.h"
 
 #ifdef ENABLE_NET_LOG
-#include <cryptoTools/Common/Log.h>
+#include "cryptoTools/Common/Log.h"
 #endif
 #include <future>
 #include <cassert>
@@ -262,8 +262,8 @@ namespace osuCrypto {
             asyncRecv(Container & c, std::function<void(const error_code&)> fn);
 
         // Receive data over the network asynchronously. The function returns right away,
-        // before the data has been received. When all the data has benn received the 
-        // future is set and the callback fn is called. The container must be the correct 
+        // before the data has been received. When all the data has benn received the
+        // future is set and the callback fn is called. The container must be the correct
         // size to fit the data received.
         template <class Container>
         typename std::enable_if<

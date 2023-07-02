@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Common/MatrixView.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Common/MatrixView.h"
 #include <cstring>
 #include <type_traits>
 namespace osuCrypto

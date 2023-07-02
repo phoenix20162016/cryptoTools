@@ -1,6 +1,6 @@
 #pragma once
 // This file and the associated implementation has been placed in the public domain, waiving all copyright. No restrictions are placed on its use.
-#include <cryptoTools/Common/Defines.h>
+#include "cryptoTools/Common/Defines.h"
 #include <type_traits>
 #include <cassert>
 
@@ -179,7 +179,7 @@ namespace osuCrypto {
                 // pi = AES(x)
                 ecbEncBlocks<blocks>(plaintext, pix);
 
-                // { tweaks_0, ..., baseTweak_{blocks - 1} } 
+                // { tweaks_0, ..., baseTweak_{blocks - 1} }
                 generateTweaks<blocks>(std::forward<TweakFn>(tweakFn), buff);
 
                 // AES(x) ^ tweaks

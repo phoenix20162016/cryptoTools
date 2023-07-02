@@ -2,16 +2,16 @@
 #ifdef ENABLE_BOOST
 
 
-#include <cryptoTools/Network/IOService.h>
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Common/Finally.h>
-#include <cryptoTools/Common/Log.h>
-#include <cryptoTools/Common/Timer.h>
-#include <cryptoTools/Network/Session.h>
-#include <cryptoTools/Network/IoBuffer.h>
-#include <cryptoTools/Network/Channel.h>
-#include <cryptoTools/Network/SocketAdapter.h>
-#include <cryptoTools/Crypto/AES.h>
+#include "cryptoTools/Network/IOService.h"
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Common/Finally.h"
+#include "cryptoTools/Common/Log.h"
+#include "cryptoTools/Common/Timer.h"
+#include "cryptoTools/Network/Session.h"
+#include "cryptoTools/Network/IoBuffer.h"
+#include "cryptoTools/Network/Channel.h"
+#include "cryptoTools/Network/SocketAdapter.h"
+#include "cryptoTools/Crypto/AES.h"
 
 #include <stdio.h>
 #include <algorithm>
@@ -103,7 +103,7 @@ namespace osuCrypto
         mHandle.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 
         //#ifdef _MSC_VER
-        //        typedef boost::asio::detail::socket_option::boolean<BOOST_ASIO_OS_DEF(SOL_SOCKET), SO_EXCLUSIVEADDRUSE> excluse_address; 
+        //        typedef boost::asio::detail::socket_option::boolean<BOOST_ASIO_OS_DEF(SOL_SOCKET), SO_EXCLUSIVEADDRUSE> excluse_address;
         //        mHandle.set_option(excluse_address(true));
         //#endif // _MSC_VER
 
@@ -170,10 +170,10 @@ namespace osuCrypto
                                     " to give more. Increase the maximum number of file descriptors or use fewer sockets\n");
 
                             }
-                            
+
                             // if the error code is not for operation canceled, print it to the terminal.
                             if (ec.value() != boost::asio::error::operation_aborted && mIOService.mPrint)
-                                std::cout << "Acceptor.listen failed for socket#" << std::to_string(sockIter->mIdx) << " at port "<< mPort 
+                                std::cout << "Acceptor.listen failed for socket#" << std::to_string(sockIter->mIdx) << " at port "<< mPort
                                     << " ~~ " << ec.message() << " " << ec.value() << std::endl;
 
                             erasePendingSocket(sockIter);
@@ -596,9 +596,9 @@ namespace osuCrypto
             auto& sessionID = chl->mSession->mSessionID;
 
             // add this channel to the list of channels in this session
-            // that are looking for a matching socket. If a existing socket 
-            // is a match, they are paired up. Otherwise the acceptor 
-            // will pair them up once the matching socket is connected                
+            // that are looking for a matching socket. If a existing socket
+            // is a match, they are paired up. Otherwise the acceptor
+            // will pair them up once the matching socket is connected
             sessionGroup->add(chl, this);
 
             // check if this session has already been paired up with
@@ -719,7 +719,7 @@ namespace osuCrypto
                 LOG_MSG("socket " + name + " matched with existing session: " + fullKey);
 
                 // add this socket to the group. It will be matched with a Channel
-                // if there is one waiting for the socket or the socket be stored 
+                // if there is one waiting for the socket or the socket be stored
                 // in the group to wait for a matching Channel.
                 auto& group = *claimedIter->second;
                 group->add(std::move(socket), this);
@@ -750,7 +750,7 @@ namespace osuCrypto
             GroupList::iterator sessionGroupIter = mGroups.end();
 
             // In the event that this is the first socket with this session Name/ID,
-            // see if there is a matching unclaimed session group that has a matching 
+            // see if there is a matching unclaimed session group that has a matching
             // name and has a channel with the same name as this socket. If so, set
             // the sessionGroup pointer to point at it.
             auto unclaimedLocalIter = mUnclaimedGroups.find(sessionName);
@@ -791,12 +791,12 @@ namespace osuCrypto
                 // merge the sockets into the group of cahnnels.
                 sessionGroup->merge(*socketGroup, this);
 
-                // mark these sockets as claimed and remove them from the list of 
+                // mark these sockets as claimed and remove them from the list of
                 // unclaimed groups. The session group will be added as a claimed group.
                 socketGroup->removeMapping();
                 sessionGroup->removeMapping();
 
-                // remove the actual socket group since it has been merged 
+                // remove the actual socket group since it has been merged
                 // into the session group.
                 mSockets.erase(socketGroup);
 
@@ -922,7 +922,7 @@ namespace osuCrypto
                     std::lock_guard<std::mutex> lock(mWorkerMtx);
                     if(mWorkerLog.size())
                     {
-                        lout << "IOSerive::stop() is waiting for: \n"; 
+                        lout << "IOSerive::stop() is waiting for: \n";
                         for(auto& v : mWorkerLog)
                             lout << '\t' << v.second << "\n";
                         lout << std::flush;

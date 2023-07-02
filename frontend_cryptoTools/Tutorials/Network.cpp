@@ -2,10 +2,10 @@
 #ifdef ENABLE_BOOST
 
 #include "Network.h"
-#include <cryptoTools/Common/Defines.h>
-#include <cryptoTools/Network/Channel.h>
-#include <cryptoTools/Network/Session.h>
-#include <cryptoTools/Network/IOService.h>
+#include "cryptoTools/Common/Defines.h"
+#include "cryptoTools/Network/Channel.h"
+#include "cryptoTools/Network/Session.h"
+#include "cryptoTools/Network/IOService.h"
 
 
 using namespace osuCrypto;
@@ -49,7 +49,7 @@ void networkTutorial()
 
     std::string serversIpAddress = ip + ':' + std::to_string(port);
 
-    // Optional: Session names can be used to help the network 
+    // Optional: Session names can be used to help the network
     // identify which sessions should be paired up. This is used
     // when there are several "services" offered on a single port.
     // SessionHint is used to identify the "service" to connect with.
@@ -97,7 +97,7 @@ void networkTutorial()
 
     if (open == false)
     {
-        // Wait until the channel is open. This will throw 
+        // Wait until the channel is open. This will throw
         // on an connection error.
         chl0.waitForConnection();
     }
@@ -298,14 +298,14 @@ void networkTutorial()
         //     emptyChannel.waitForConnection();
         // or a similar call, the program will block forever.
 
-        // if we fail to get a connection, cancel() should be called to prevent the channel 
+        // if we fail to get a connection, cancel() should be called to prevent the channel
         // from blocking when it is destructed.
         if (emptyChannel.isConnected() == false)
             emptyChannel.cancel();
     }
 
     // We can also cancel pending operations. However, this will also
-    // close the channel making it unusable. 
+    // close the channel making it unusable.
     {
         Channel tempChl0 = Session(ios, "127.0.0.1:1515", SessionMode::Server).addChannel();
         Channel tempChl1 = Session(ios, "127.0.0.1:1515", SessionMode::Client).addChannel();
@@ -364,8 +364,8 @@ void networkTutorial()
 
     for (u64 i = 0; i < numSession; ++i)
     {
-        // The server will create many sessions, each will find one 
-        // of the clients. Optionally a sessionHint/serviceName can be 
+        // The server will create many sessions, each will find one
+        // of the clients. Optionally a sessionHint/serviceName can be
         // provided
         Session perPartySession(ios, serversIpAddress, SessionMode::Server /* , serviceName */);
 
