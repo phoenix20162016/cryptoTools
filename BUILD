@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 config_setting(
   name = "enable_sse",
-  values = {"define": "enable_sse=true"},
+  values = {"define": "cpu_arch=x86_64"},
 )
 
 GEN_CONFIG_H_CMD = select({
@@ -106,7 +106,7 @@ DEFAULT_C_OPT = ENABLE_SSE_COPT + ENABLE_RELIC_COPT
 DEFAILT_LINK_OPT = ENABLE_RELIC_DEPS
 
 cc_library(
-  name = "cryptoTools",
+  name = "libcryptoTools",
   srcs = glob([
     "cryptoTools/Circuit/*.cpp",
     "cryptoTools/Common/*.cpp",
@@ -176,7 +176,7 @@ cc_library(
   linkopts = ["-pthread"],
   linkstatic = True,
   deps = [
-    ":cryptoTools",
+    ":libcryptoTools",
   ] + DEFAILT_LINK_OPT,
 )
 
@@ -205,7 +205,7 @@ cc_library(
   linkopts = ["-pthread -lstdc++"],
   linkstatic = True,
   deps = [
-    ":cryptoTools",
+    ":libcryptoTools",
     ":tests_cryptoTools",
   ] + DEFAILT_LINK_OPT,
 )
@@ -224,7 +224,7 @@ cc_binary(
   linkstatic = False,
   deps = [
     ":lib_frontend_cryptoTools",
-    ":cryptoTools",
+    ":libcryptoTools",
     ":tests_cryptoTools",
   ] + DEFAILT_LINK_OPT,
 )
